@@ -11,7 +11,7 @@ class DatabaseHandler
 public:
     void init();
 
-    bool insertUser(const User &user);
+    int insertUser(const User &user);
     bool updateUser(const User &user);
     bool deleteUser(int userId);
     std::vector<User> userSelect(const QString &whereClause = "isDeleted = 0");

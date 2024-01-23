@@ -11,7 +11,7 @@ void DatabaseHandler::init()
     createTables();
 }
 
-bool DatabaseHandler::insertUser(const User &user)
+int DatabaseHandler::insertUser(const User &user)
 {
     QSqlQuery query;
     if (query.prepare(User::SQL_INSERT_PLACEHOLDER))
@@ -22,18 +22,19 @@ bool DatabaseHandler::insertUser(const User &user)
         query.bindValue(":province", user.province());
         query.bindValue(":city", user.city());
         query.bindValue(":zipCode", user.zipCode());
-        query.bindValue(":birthdate", user.birthdate());
+        query.bindValue(":birthdate", user.birthdate().toString("yyyy-MM-dd"));
         query.bindValue(":phoneNumber", user.phoneNumber());
         query.bindValue(":email", user.email());
         query.bindValue(":username", user.username());
         query.bindValue(":passwordHash", user.passwordHash());
         query.bindValue(":linkedInProfileUrl", user.linkedInProfileUrl());
         query.bindValue(":isDeleted", user.isDeleted());
-        query.bindValue(":lastModification", user.lastModification());
+        query.bindValue(":lastModification", user.lastModification().toString("yyyy-MM-dd hh:mm:ss.zzz"));
         if (query.exec())
         {
             qDebug() << "user inserted successfully!";
-            return true;
+            int lastInsertedId = query.lastInsertId().toInt();
+            return lastInsertedId;
         }
         else
         {
@@ -44,7 +45,7 @@ bool DatabaseHandler::insertUser(const User &user)
     {
         qDebug() << query.lastError().text() << __FILE__ << __LINE__;
     }
-    return false;
+    return -1;
 }
 
 bool DatabaseHandler::updateUser(const User &user)
@@ -58,14 +59,14 @@ bool DatabaseHandler::updateUser(const User &user)
         query.bindValue(":province", user.province());
         query.bindValue(":city", user.city());
         query.bindValue(":zipCode", user.zipCode());
-        query.bindValue(":birthdate", user.birthdate());
+        query.bindValue(":birthdate", user.birthdate().toString("yyyy-MM-dd"));
         query.bindValue(":phoneNumber", user.phoneNumber());
         query.bindValue(":email", user.email());
         query.bindValue(":username", user.username());
         query.bindValue(":passwordHash", user.passwordHash());
         query.bindValue(":linkedInProfileUrl", user.linkedInProfileUrl());
         query.bindValue(":isDeleted", user.isDeleted());
-        query.bindValue(":lastModification", user.lastModification());
+        query.bindValue(":lastModification", user.lastModification().toString("yyyy-MM-dd hh:mm:ss.zzz"));
         query.bindValue(":id", user.id());
         if (query.exec())
         {
@@ -92,7 +93,7 @@ bool DatabaseHandler::deleteUser(int userId)
         query.bindValue(":id", userId);
         if (query.exec())
         {
-            qDebug() << "user deleted successfully";
+            qDebug() << "user deleted successfully!";
             return true;
         }
         else
@@ -130,14 +131,14 @@ std::vector<User> DatabaseHandler::userSelect(const QString &whereClause)
                     ->setProvince(query.value("province").toString())
                     ->setCity(query.value("city").toString())
                     ->setZipCode(query.value("zipCode").toString())
-                    ->setBirthdate(QDate::fromString(query.value("birthdate").toString()))
+                    ->setBirthdate(QDate::fromString(query.value("birthdate").toString(), "yyyy-MM-dd"))
                     ->setPhoneNumber(query.value("phoneNumber").toString())
                     ->setEmail(query.value("email").toString())
                     ->setUsername(query.value("username").toString())
                     ->setPasswordHash(query.value("passwordHash").toString())
                     ->setLinkedInProfileUrl(query.value("linkedInProfileUrl").toString())
                     ->setIsDeleted(query.value("isDeleted").toBool())
-                    ->setLastModification(QDateTime::fromString(query.value("lastModification").toString()));
+                    ->setLastModification(QDateTime::fromString(query.value("lastModification").toString(), "yyyy-MM-dd hh:mm:ss.zzz"));
                 userList.push_back(user);
             }
         }

@@ -15,14 +15,29 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
 
 set(PROJECT_SOURCES
-    main.cpp
-
+    res.qrc
+    main.cpp    
+    models/user.cpp models/user.h
     views/mainwindow.cpp views/mainwindow.h views/mainwindow.ui
-
+    shared/util.h shared/util.cpp
     shared/constants.h shared/constants.cpp
     shared/databasehandler.h shared/databasehandler.cpp
-
-    models/user.cpp models/user.h
+    shared/jsonfilereader.cpp shared/jsonfilereader.h
+    shared/validators/passwordvalidator.cpp shared/validators/passwordvalidator.h
+    shared/validators/emailvalidator.h shared/validators/emailvalidator.cpp
+    shared/validators/urlvalidator.h shared/validators/urlvalidator.cpp
+    shared/validators/usernamevalidator.h shared/validators/usernamevalidator.cpp
+    shared/widgets/urltextinput.h shared/widgets/urltextinput.cpp
+    shared/widgets/removebutton.h shared/widgets/removebutton.cpp
+    shared/widgets/countrycombo.cpp shared/widgets/countrycombo.h
+    shared/widgets/emailtextinput.cpp shared/widgets/emailtextinput.h
+    shared/widgets/usernametextinput.h shared/widgets/usernametextinput.cpp
+    shared/widgets/passwordtextinput.cpp shared/widgets/passwordtextinput.h
+    shared/widgets/passwordexplanationpopup.cpp shared/widgets/passwordexplanationpopup.h
+    shared/widgets/notextselectiontextbrowser.h shared/widgets/notextselectiontextbrowser.cpp
+    shared/widgets/currentdateedit.cpp shared/widgets/currentdateedit.h
+    shared/widgets/areyousuredialog.cpp shared/widgets/areyousuredialog.h
+    shared/widgets/usertablewidget.cpp shared/widgets/usertablewidget.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -47,6 +62,8 @@ else()
         )
     endif()
 endif()
+
+target_include_directories(UserManager PRIVATE ".")
 
 target_include_directories(UserManager PRIVATE "./3rdparty/sha256jeremy/src")
 target_link_directories(UserManager PRIVATE "./3rdparty/sha256jeremy/lib")

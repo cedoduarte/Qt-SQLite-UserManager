@@ -23,6 +23,25 @@ class User : public QObject
     Q_PROPERTY(bool isDeleted READ isDeleted WRITE setIsDeleted NOTIFY isDeletedChanged FINAL)
     Q_PROPERTY(QDateTime lastModification READ lastModification WRITE setLastModification NOTIFY lastModificationChanged FINAL)
 public:
+    enum Field
+    {
+        ID,
+        FIRST_NAME,
+        LAST_NAME,
+        COUNTRY,
+        PROVINCE,
+        CITY,
+        ZIP_CODE,
+        BIRTHDATE,
+        PHONE_NUMBER,
+        EMAIL,
+        USERNAME,
+        PASSWORD_HASH,
+        LINKEDIN_PROFILE_URL,
+        IS_DELETED,
+        LAST_MODIFICATION
+    };
+
     User(QObject *parent = nullptr);
 
     User(const User &other);
